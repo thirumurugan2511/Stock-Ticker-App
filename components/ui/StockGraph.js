@@ -6,16 +6,7 @@ import { Calendar, Loader2 } from "lucide-react"
 export default function StockGraph ({data, symbol}) {
     const [timeRange, setTimeRange] = useState('1m')
 
-    if(!data || data.length === 0) {
-        return (
-            <div className="h-96 flex flex-col items-center justify-center bg-gray-50 rounded-lg">
-                <Loader2 className="animate-sppin text-blue-500 mb-4" size={32} />
-                <p className="text-gray-500">Loading chart data</p>
-            </div>
-        )
-    }
-
-    const filterData = useMemo(() => {
+        const filterData = useMemo(() => {
         if(!data || data.length === 0) return [];
 
         const now = new Date();
@@ -46,7 +37,7 @@ export default function StockGraph ({data, symbol}) {
             return itemDate >= cutoffDate
         })
     }, [data, timeRange])
-    
+
     const chartData =  filterData.map(item => ({
         date: item.date,
         price: item.close,
@@ -58,6 +49,15 @@ export default function StockGraph ({data, symbol}) {
 
     const formatPrice = (value) => `₹${value.toFixed(2)}`
     const formatDate = (value) => new Date(value). toLocaleDateString();
+
+        if(!data || data.length === 0) {
+        return (
+            <div className="h-96 flex flex-col items-center justify-center bg-gray-50 rounded-lg">
+                <Loader2 className="animate-sppin text-blue-500 mb-4" size={32} />
+                <p className="text-gray-500">Loading chart data</p>
+            </div>
+        )
+    }
 
     return(
         <div className="bg-white p-4 rounded-lg">

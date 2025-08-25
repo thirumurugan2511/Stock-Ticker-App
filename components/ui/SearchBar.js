@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, useEffect } from "react"
+import { useState,useCallback, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { searchStocks } from "@/lib/api"
 import { Search, Loader2, TrendingUp } from "lucide-react"
@@ -16,6 +16,20 @@ export default function SearchBar() {
         setMounted(true)
     }, [])
 
+    const performSearch = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            const data =  await searchStocks(query);
+            setResults(data);
+            setShowResults(true)
+        } catch (error) {
+            console.error('search error:', error);
+            setResults([])
+        } finally {
+            setIsLoading(false)
+        }
+    }, [query, mounted]);
+
     useEffect(() => {
         if(!mounted) return;
         const delayDebounceFn = setTimeout(() => {
@@ -30,31 +44,11 @@ export default function SearchBar() {
         return () => clearTimeout(delayDebounceFn)
     }, [query, mounted])
 
-    const performSearch = async () => {
-        setIsLoading(true);
-        try {
-            const data =  await searchStocks(query);
-            setResults(data);
-            setShowResults(true)
-        } catch (error) {
-            console.error('search error:', error);
-            setResults([])
-        } finally {
-            setIsLoading(false)
-        }
-    }
-
     const handleSelect = (stock) => {
         setQuery('');
         setResults([]);
         setShowResults(false)
         router.push(`/stock/${stock.symbol}`)
-    }
-
-    const hanldeBlur = () => {
-        setTimeout(() => {
-            setShowResults(false)
-        }, 200)
     }
 
     const shouldShowResults = mounted && showResults && results.length > 0;
