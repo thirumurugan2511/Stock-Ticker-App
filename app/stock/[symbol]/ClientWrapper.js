@@ -5,7 +5,7 @@ import FavoriteButton from "@/components/ui/FavoriteButton"
 import StockDetails from "@/components/ui/StockDetails"
 
 export default function ClientWrapper({
-    symbol, priceData, searchResults, stockName
+    symbol,companyName, priceData, searchResults, stockName
 }) {
     const [ mounted, setMounted] = useState(false);
     const [selectStock, setSelectedStock] = useState(null);
@@ -40,9 +40,10 @@ export default function ClientWrapper({
             <div className="mb-8">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-800">
-                            {displayStockName} <span className="text-blue-600 font-bold text-xl">{symbol}</span>
+                        <h1 className="text-xl font-bold text-black">
+                            {companyName} 
                         </h1>
+                        <span className="text-blue-600 font-bold text-xl">{symbol}</span>
                         <p className="text-gray-600 mt-0">NSE Real-time stock information and analysis</p>
                     </div>
                     <FavoriteButton stock={{symbol, name:displayStockName}}/>
